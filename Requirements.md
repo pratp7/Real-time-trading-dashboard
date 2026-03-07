@@ -1,3 +1,22 @@
+The assessment is a hands-on frontend engineering challenge where you'll build a real-time cryptocurrency data dashboard using React and TypeScript. You'll work with a provided mock Node.js backend that serves both REST API and WebSocket data. All requirements and backend details are in the document linked below.
+📎 Assessment Document: Below Pasted
+⏳ Deadline: Please submit your completed solution within 2 business days of receiving this email.
+📦 How to submit: Create a public GitHub repository containing your solution and reply to this email with the repository link.
+Your repository should include:
+Complete source code in TypeScript with progressive commit history
+A clear README.md with project overview, setup instructions, assumptions, and bonus feature notes
+Instructions for running your application locally
+A few tips before you start:
+Read the entire document carefully, including the backend README, before writing any code
+We value clean TypeScript usage, proper React patterns, and responsive design
+Client-side data caching and efficient WebSocket management are important
+Show your thought process through progressive commits — please avoid submitting everything in a single commit
+Document any assumptions or trade-offs in your README
+Bonus features are optional but appreciated if time allows
+
+
+
+
 [Frontend / Fullstack] Coding Challenge: Real-Time Trading Dashboard
 Objective
 Design and implement a real-time trading dashboard that displays live ticker prices and interactive charts for selected financial instruments.
