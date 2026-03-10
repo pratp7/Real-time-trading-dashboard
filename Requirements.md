@@ -44,17 +44,21 @@ Scope
 ○	Includes basic styling and responsiveness
 4. Architecture & Design
 ```
-
+```
 ●	Use a microservices-friendly structure
 ●	Apply clean code principles and separation of concerns
 ●	Include basic unit tests for backend logic
 ●	Use Docker for containerization
+```
+```
 Bonus Features (Optional)
 
 ●	Add user authentication (mocked)
 ●	Implement caching for historical data
 ●	Add alerting for price thresholds
 ●	Deploy using Kubernetes manifests
+```
+```
 Evaluation Criteria
 
 ●	Code quality and structure
@@ -63,6 +67,8 @@ Evaluation Criteria
 ●	UI responsiveness and interactivity
 ●	Test coverage and documentation
 ●	Bonus features and overall polish
+```
+```
 Submission Details
 
 Please submit your solution via a GitHub repository link. The repository should include:
@@ -71,3 +77,4 @@ Please submit your solution via a GitHub repository link. The repository should 
 ○	Any assumptions or trade-offs made
 ○	Instructions for running tests
 ○	Notes on bonus features (if implemented)
+```
