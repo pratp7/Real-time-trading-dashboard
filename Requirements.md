@@ -21,6 +21,7 @@ Bonus features are optional but appreciated if time allows
 Objective
 Design and implement a real-time trading dashboard that displays live ticker prices and interactive charts for selected financial instruments.
 Scope
+```
 1. Backend Service (Java/NodeJS/Go)
    
 ●	Build a microservice that:
@@ -30,6 +31,10 @@ Scope
 ■	List available tickers
 ■	Fetch historical price data (mocked)
 ■	Subscribe to real-time updates via WebSocket
+
+```
+
+```
 3. Frontend Dashboard (React + TypeScript)
    
 ●	Create a dashboard UI that:
@@ -38,6 +43,7 @@ Scope
 ○	Allows users to switch between tickers
 ○	Includes basic styling and responsiveness
 4. Architecture & Design
+```
 
 ●	Use a microservices-friendly structure
 ●	Apply clean code principles and separation of concerns
