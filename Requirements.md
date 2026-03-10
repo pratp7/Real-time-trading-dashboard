@@ -42,9 +42,10 @@ Scope
 ○	Shows a real-time chart for a selected ticker (e.g., using Chart.js or Recharts)
 ○	Allows users to switch between tickers
 ○	Includes basic styling and responsiveness
+```
+```
 4. Architecture & Design
-```
-```
+
 ●	Use a microservices-friendly structure
 ●	Apply clean code principles and separation of concerns
 ●	Include basic unit tests for backend logic
