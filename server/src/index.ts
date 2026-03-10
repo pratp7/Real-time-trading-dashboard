@@ -4,41 +4,35 @@ import cors from "cors";
 const app = express();
 const PORT = 5000;
 
-const configuredOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(",").map((origin) => origin.trim())
-  : [];
+const productionOrigin = process.env.PRODUCTION_APP_URL?.trim();
 
 const allowedOrigins = new Set([
   "http://localhost:5173",
   "http://127.0.0.1:5173",
-  ...configuredOrigins,
+  ...(productionOrigin ? [productionOrigin] : []),
 ]);
 
 const isAllowedOrigin = (origin: string) => {
-  if (allowedOrigins.has(origin)) {
-    return true;
-  }
-
-  return /^(https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?)$/.test(origin);
+  return allowedOrigins.has(origin);
 };
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (e.g., curl, mobile apps, Postman)
-      if (!origin || isAllowedOrigin(origin)) {
-        callback(null, true);
-        return;
-      }
+const corsOptions: cors.CorsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g., curl, mobile apps, Postman)
+    if (!origin || isAllowedOrigin(origin)) {
+      callback(null, true);
+      return;
+    }
 
-      callback(new Error("Not allowed by CORS"));
-    },
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    credentials: true,
-  })
-);
+    callback(new Error("Not allowed by CORS"));
+  },
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  credentials: true,
+};
 
-app.options("/{*path}", cors());
+app.use(cors(corsOptions));
+
+app.options("/{*path}", cors(corsOptions));
 app.use(express.json());
 
 
