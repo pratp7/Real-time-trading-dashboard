@@ -1,12 +1,9 @@
+import { lazy, Suspense } from 'react'
 import { Navigate, type RouteObject } from 'react-router-dom'
 import type { ReactElement } from 'react'
 
 import { AppLayout } from '../layouts/AppLayout'
-import { AuthPage } from '../pages/AuthPage'
-import { AlertsPage } from '../pages/AlertsPage'
-import { DashboardPage } from '../pages/DashboardPage'
 import { NotFoundPage } from '../pages/NotFoundPage'
-import { TickerWorkspacePage } from '../pages/TickerWorkspacePage'
 import { GuestOnly, RequireAuth } from './guards'
 
 type AccessType = 'public' | 'protected' | 'guest'
@@ -17,25 +14,66 @@ interface RouteDefinition {
   access: AccessType
 }
 
+const AuthPage = lazy(async () => {
+  const module = await import('../pages/AuthPage')
+  return { default: module.AuthPage }
+})
+
+const DashboardPage = lazy(async () => {
+  const module = await import('../pages/DashboardPage')
+  return { default: module.DashboardPage }
+})
+
+const TickerWorkspacePage = lazy(async () => {
+  const module = await import('../pages/TickerWorkspacePage')
+  return { default: module.TickerWorkspacePage }
+})
+
+const AlertsPage = lazy(async () => {
+  const module = await import('../pages/AlertsPage')
+  return { default: module.AlertsPage }
+})
+
+const withSuspense = (element: ReactElement): ReactElement => {
+  return (
+    <Suspense
+      fallback={
+        <div
+          style={{
+            border: '1px solid var(--color-border)',
+            borderRadius: 12,
+            background: 'var(--color-surface)',
+            padding: 16,
+          }}
+        >
+          Loading page...
+        </div>
+      }
+    >
+      {element}
+    </Suspense>
+  )
+}
+
 const appPages: RouteDefinition[] = [
   {
     path: '/auth',
-    element: <AuthPage />,
+    element: withSuspense(<AuthPage />),
     access: 'guest',
   },
   {
     path: '/dashboard',
-    element: <DashboardPage />,
+    element: withSuspense(<DashboardPage />),
     access: 'public',
   },
   {
     path: '/market/:tickerId',
-    element: <TickerWorkspacePage />,
+    element: withSuspense(<TickerWorkspacePage />),
     access: 'protected',
   },
   {
     path: '/alerts',
-    element: <AlertsPage />,
+    element: withSuspense(<AlertsPage />),
     access: 'protected',
   },
 ]

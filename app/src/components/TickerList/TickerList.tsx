@@ -10,6 +10,8 @@ import {
 } from '../../store/tickersSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { selectQuotesBySymbol } from '../../store/quotesSlice'
+import { formatPercent } from '../../utils/formatPercent'
+import { formatPrice } from '../../utils/formatPrice'
 
 const rowBaseStyle: React.CSSProperties = {
   width: '100%',
@@ -128,13 +130,12 @@ const QuoteSummary = ({ quote }: QuoteSummaryProps) => {
   }
 
   const changeColor = quote.change >= 0 ? 'var(--color-positive)' : 'var(--color-negative)'
-  const signedPercent = quote.percent_change >= 0 ? `+${quote.percent_change}` : `${quote.percent_change}`
 
   return (
     <>
-      <div style={{ fontWeight: 700 }}>${quote.price.toFixed(2)}</div>
+      <div style={{ fontWeight: 700 }}>{formatPrice(quote.price)}</div>
       <div style={{ marginTop: 6, fontSize: 13, color: changeColor }}>
-        {quote.change.toFixed(2)} ({signedPercent}%)
+        {formatPrice(quote.change)} ({formatPercent(quote.percent_change)})
       </div>
     </>
   )
