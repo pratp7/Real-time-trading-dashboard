@@ -23,8 +23,16 @@ export const createAlert = (req: Request, res: Response): void => {
     condition?: AlertCondition;
   };
 
-  if (!symbol || !name || typeof targetPrice !== "number") {
+  const normalizedSymbol = symbol?.trim().toLowerCase();
+  const normalizedName = name?.trim();
+
+  if (!normalizedSymbol || !normalizedName || typeof targetPrice !== "number") {
     res.status(400).json({ error: "symbol, name and targetPrice are required" });
+    return;
+  }
+
+  if (!Number.isFinite(targetPrice) || targetPrice <= 0) {
+    res.status(400).json({ error: "targetPrice must be a positive number" });
     return;
   }
 
@@ -34,8 +42,8 @@ export const createAlert = (req: Request, res: Response): void => {
   }
 
   const alert = alertsService.createAlert({
-    symbol,
-    name,
+    symbol: normalizedSymbol,
+    name: normalizedName,
     targetPrice,
     condition,
     userId: getUserId(req as AuthenticatedRequest),
