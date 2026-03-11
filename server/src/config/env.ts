@@ -1,4 +1,4 @@
-type MarketProvider = "binance" | "kraken";
+type MarketProvider = "mock" | "binance" | "kraken";
 
 export interface AppConfig {
   port: number;
@@ -17,11 +17,15 @@ const parsePort = (rawPort: string | undefined): number => {
 };
 
 const parseMarketProvider = (rawProvider: string | undefined): MarketProvider => {
+  if (rawProvider === "mock") {
+    return "mock";
+  }
+
   if (rawProvider === "kraken") {
     return "kraken";
   }
 
-  return "binance";
+  return "mock";
 };
 
 export const config: AppConfig = {

@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 
+import { useQuotesSubscription } from '../../hooks/useQuotesSubscription'
 import {
   selectTicker,
   selectTickerId,
@@ -8,6 +9,7 @@ import {
   selectTickersStatus,
 } from '../../store/tickersSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { selectQuotesBySymbol } from '../../store/quotesSlice'
 
 const rowBaseStyle: React.CSSProperties = {
   width: '100%',
@@ -25,9 +27,12 @@ export const TickerList = () => {
   const dispatch = useAppDispatch()
 
   const items = useAppSelector(selectTickers)
+  const quotesBySymbol = useAppSelector(selectQuotesBySymbol)
   const selectedTickerId = useAppSelector(selectTickerId)
   const status = useAppSelector(selectTickersStatus)
   const error = useAppSelector(selectTickersError)
+
+  useQuotesSubscription(items.map((item) => item.id))
 
   const handleTickerClick = (tickerId: string) => {
     dispatch(selectTicker(tickerId))
@@ -75,14 +80,62 @@ export const TickerList = () => {
                 background: isSelected ? 'var(--color-surface-alt)' : 'var(--color-surface)',
               }}
             >
-              <strong>{item.name}</strong> ({item.id.toUpperCase()})
-              <p style={{ marginTop: 6, fontSize: 13, color: 'var(--color-text-secondary)' }}>
-                Click to open protected ticker workspace
-              </p>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  gap: 16,
+                  alignItems: 'flex-start',
+                }}
+              >
+                <div>
+                  <strong>{item.name}</strong> ({item.id.toUpperCase()})
+                  <p style={{ marginTop: 6, fontSize: 13, color: 'var(--color-text-secondary)' }}>
+                    Click to open protected ticker workspace
+                  </p>
+                </div>
+
+                <div style={{ minWidth: 120, textAlign: 'right' }}>
+                  <QuoteSummary quote={quotesBySymbol[item.id.toUpperCase()]} />
+                </div>
+              </div>
             </button>
           </li>
         )
       })}
     </ul>
+  )
+}
+
+interface QuoteSummaryProps {
+  quote?: {
+    price: number
+    change: number
+    percent_change: number
+  }
+}
+
+const QuoteSummary = ({ quote }: QuoteSummaryProps) => {
+  if (!quote) {
+    return (
+      <>
+        <div style={{ fontWeight: 700 }}>--</div>
+        <div style={{ marginTop: 6, fontSize: 13, color: 'var(--color-text-muted)' }}>
+          Waiting for price...
+        </div>
+      </>
+    )
+  }
+
+  const changeColor = quote.change >= 0 ? 'var(--color-positive)' : 'var(--color-negative)'
+  const signedPercent = quote.percent_change >= 0 ? `+${quote.percent_change}` : `${quote.percent_change}`
+
+  return (
+    <>
+      <div style={{ fontWeight: 700 }}>${quote.price.toFixed(2)}</div>
+      <div style={{ marginTop: 6, fontSize: 13, color: changeColor }}>
+        {quote.change.toFixed(2)} ({signedPercent}%)
+      </div>
+    </>
   )
 }
