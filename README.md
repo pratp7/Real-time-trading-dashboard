@@ -2,6 +2,8 @@
 
 Real-time crypto trading dashboard with a React + TypeScript frontend and a Node.js + Express backend.
 
+Important: backend market data is mock/simulated (deterministic feed) for this assessment.
+
 ## Project Structure
 
 - app: React frontend (Vite, Redux Toolkit, Socket.IO client, Chart.js)
