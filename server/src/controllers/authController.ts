@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 
+import { authenticateMockUser, signMockToken } from "../services/authService";
+
 export const login = (req: Request, res: Response): void => {
   const { email, password } = req.body as { email?: string; password?: string };
 
@@ -8,11 +10,13 @@ export const login = (req: Request, res: Response): void => {
     return;
   }
 
-  res.status(200).json({
-    user: {
-      id: "user-1",
-      email,
-    },
-    token: "mock-token",
-  });
+  const user = authenticateMockUser(email, password);
+  if (!user) {
+    res.status(401).json({ error: "Invalid credentials" });
+    return;
+  }
+
+  const token = signMockToken(user);
+
+  res.status(200).json({ user, token });
 };

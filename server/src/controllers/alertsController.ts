@@ -1,14 +1,17 @@
 import { Request, Response } from "express";
 
 import { alertsService } from "../services/alertsService";
+import { AuthUser } from "../types/domain";
 import { AlertCondition } from "../types/domain";
 
-const getUserId = (req: Request): string => {
+type AuthenticatedRequest = Request & { user?: AuthUser };
+
+const getUserId = (req: AuthenticatedRequest): string => {
   return req.user?.id ?? "user-1";
 };
 
 export const listAlerts = (req: Request, res: Response): void => {
-  const alerts = alertsService.listAlerts(getUserId(req));
+  const alerts = alertsService.listAlerts(getUserId(req as AuthenticatedRequest));
   res.status(200).json({ alerts });
 };
 
@@ -35,7 +38,7 @@ export const createAlert = (req: Request, res: Response): void => {
     name,
     targetPrice,
     condition,
-    userId: getUserId(req),
+    userId: getUserId(req as AuthenticatedRequest),
   });
 
   res.status(201).json(alert);
@@ -51,7 +54,11 @@ export const updateAlert = (req: Request, res: Response): void => {
     return;
   }
 
-  const updated = alertsService.toggleAlert(getUserId(req), alertId, isActive);
+  const updated = alertsService.toggleAlert(
+    getUserId(req as AuthenticatedRequest),
+    alertId,
+    isActive,
+  );
   if (!updated) {
     res.status(404).json({ error: "Alert not found" });
     return;
@@ -63,7 +70,7 @@ export const updateAlert = (req: Request, res: Response): void => {
 export const deleteAlert = (req: Request, res: Response): void => {
   const alertIdParam = req.params.id;
   const alertId = Array.isArray(alertIdParam) ? alertIdParam[0] : alertIdParam;
-  const deleted = alertsService.deleteAlert(getUserId(req), alertId);
+  const deleted = alertsService.deleteAlert(getUserId(req as AuthenticatedRequest), alertId);
 
   if (!deleted) {
     res.status(404).json({ error: "Alert not found" });

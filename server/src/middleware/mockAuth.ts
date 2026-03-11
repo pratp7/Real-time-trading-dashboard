@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
+import { verifyMockToken } from "../services/authService";
+import { AuthUser } from "../types/domain";
 
-const MOCK_BEARER_TOKEN = "mock-token";
+type AuthenticatedRequest = Request & { user?: AuthUser };
 
 export const mockAuth = (req: Request, res: Response, next: NextFunction): void => {
   const authHeader = req.header("Authorization");
@@ -11,15 +13,13 @@ export const mockAuth = (req: Request, res: Response, next: NextFunction): void 
   }
 
   const token = authHeader.replace("Bearer ", "").trim();
-  if (token !== MOCK_BEARER_TOKEN) {
+  const user = verifyMockToken(token);
+  if (!user) {
     res.status(401).json({ error: "Invalid token" });
     return;
   }
 
-  req.user = {
-    id: "user-1",
-    email: "demo@trading.local",
-  };
+  (req as AuthenticatedRequest).user = user;
 
   next();
 };
