@@ -1,0 +1,25 @@
+services:
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    image: realtime-dashboard-backend:latest
+    container_name: realtime-dashboard-backend
+    environment:
+      PORT: 5000
+      JWT_SECRET: dev-jwt-secret
+      MARKET_PROVIDER: mock
+      PRODUCTION_APP_URL: http://localhost:8080
+    ports:
+      - "5000:5000"
+
+  frontend:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    image: realtime-dashboard-frontend:latest
+    container_name: realtime-dashboard-frontend
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
