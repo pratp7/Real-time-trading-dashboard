@@ -8,7 +8,7 @@ function App() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await fetch('/api/')
+        const response = await fetch('/api/health')
 
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`)
