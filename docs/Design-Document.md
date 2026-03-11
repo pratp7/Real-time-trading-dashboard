@@ -85,6 +85,8 @@ For ticker list vs. chart views, there are two approaches:
 
 ## API Endpoints
 
+### `POST /auth/login `
+
 ### `GET /tickers`
 
 Returns list of available tickers.
@@ -143,6 +145,12 @@ Returns user alerts.
   ]
 }
 ```
+
+### POST `/alerts`
+
+### PATCH `/alerts/:id`
+
+### DELETE `/alerts/:id`
 
 ### WebSocket
 
