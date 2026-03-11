@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 import { authReducer } from './authSlice'
+import { tickersReducer } from './tickersSlice'
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    tickers: tickersReducer,
   },
 })
 
