@@ -1,9 +1,12 @@
 import cors from "cors";
 import express, { Request, Response } from "express";
+import { createServer } from "http";
 
 import { config } from "./config/env";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
 import { apiRouter } from "./routes";
+import { marketDataProvider } from "./services/providerRegistry";
+import { registerSocketGateway } from "./services/socketGateway";
 
 const app = express();
 
@@ -39,6 +42,9 @@ app.use("/api", apiRouter);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-app.listen(config.port, () => {
+const httpServer = createServer(app);
+registerSocketGateway(httpServer, marketDataProvider, Array.from(allowedOrigins));
+
+httpServer.listen(config.port, () => {
   console.log(`Server running at http://localhost:${config.port}`);
 });

@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
 
 import { marketDataProvider } from "../services/providerRegistry";
-
-const ALLOWED_INTERVALS = new Set(["1m", "5m", "15m", "1h", "4h", "1d"]);
-const DEFAULT_INTERVAL = "1m";
-const DEFAULT_LIMIT = 100;
-const MAX_LIMIT = 1000;
+import {
+  DEFAULT_INTERVAL,
+  MAX_LIMIT,
+  getAllowedIntervals,
+  isAllowedInterval,
+  toSafeLimit,
+} from "../services/marketValidation";
 
 const getSingleQueryParam = (param: string | string[] | undefined): string | undefined => {
   if (Array.isArray(param)) {
@@ -13,19 +15,6 @@ const getSingleQueryParam = (param: string | string[] | undefined): string | und
   }
 
   return param;
-};
-
-const toSafeLimit = (rawLimit: string | undefined): number | null => {
-  if (!rawLimit) {
-    return DEFAULT_LIMIT;
-  }
-
-  const parsed = Number.parseInt(rawLimit, 10);
-  if (Number.isNaN(parsed) || parsed < 1 || parsed > MAX_LIMIT) {
-    return null;
-  }
-
-  return parsed;
 };
 
 export const getTickers = async (_req: Request, res: Response): Promise<void> => {
@@ -39,9 +28,9 @@ export const getTickerHistory = async (req: Request, res: Response): Promise<voi
   const interval = getSingleQueryParam(req.query.interval as string | string[] | undefined);
   const normalizedInterval = interval ?? DEFAULT_INTERVAL;
 
-  if (!ALLOWED_INTERVALS.has(normalizedInterval)) {
+  if (!isAllowedInterval(normalizedInterval)) {
     res.status(400).json({
-      error: `Invalid interval. Allowed values: ${Array.from(ALLOWED_INTERVALS).join(", ")}`,
+      error: `Invalid interval. Allowed values: ${getAllowedIntervals().join(", ")}`,
     });
     return;
   }
