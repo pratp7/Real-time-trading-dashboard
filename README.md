@@ -4,6 +4,12 @@ Real-time crypto trading dashboard with a React + TypeScript frontend and a Node
 
 Important: backend market data is mock/simulated (deterministic feed) for this assessment.
 
+## Project Overview
+
+This project is a real-time cryptocurrency dashboard built for the frontend/fullstack assessment. It provides a live market view for curated tickers, a protected market workspace with candlestick charts and interval switching, and a protected alerts page for managing price alerts.
+
+The frontend is built with React, TypeScript, Redux Toolkit, React Router, and Socket.IO client. The backend is built with Express, TypeScript, JWT-based mock authentication, REST endpoints, and Socket.IO for real-time quote and candle updates.
+
 ## Project Structure
 
 - app: React frontend (Vite, Redux Toolkit, Socket.IO client, Chart.js)
